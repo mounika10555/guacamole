@@ -1,1 +1,76 @@
+services:
 
+  ldap:
+    image: osixia/openldap:1.5.0
+    container_name: ldap
+    environment:
+      LDAP_ORGANISATION: "Example Org"
+      LDAP_DOMAIN: "example.com"
+      LDAP_ADMIN_PASSWORD: "admin"
+    networks:
+      - guacnet
+  guacd:
+    image: guacamole/guacd:1.5.5
+    container_name: guacd
+    networks:
+      - guacnet
+
+  guacamole:
+    image: guacamole/guacamole:1.5.5
+    container_name: guacamole
+    depends_on:
+      - ldap
+      - guacd
+    environment:
+      GUACD_HOSTNAME: guacd
+
+      LDAP_HOSTNAME: ldap
+      LDAP_PORT: 389
+      LDAP_ENCRYPTION_METHOD: none
+
+      LDAP_USER_BASE_DN: ou=Users,dc=example,dc=com
+      LDAP_GROUP_BASE_DN: ou=Groups,dc=example,dc=com
+
+      LDAP_SEARCH_BIND_DN: cn=admin,dc=example,dc=com
+      LDAP_SEARCH_BIND_PASSWORD: admin
+
+      LDAP_USERNAME_ATTRIBUTE: uid
+      LDAP_USER_SEARCH_FILTER: (objectClass=inetOrgPerson)
+
+      LDAP_GROUP_NAME_ATTRIBUTE: cn
+      LDAP_MEMBER_ATTRIBUTE: member
+    ports:
+      - "8080:8080"
+    networks:
+      - guacnet
+
+  linux-desktop:
+    image: lscr.io/linuxserver/webtop:ubuntu-xfce
+    container_name: linux-desktop
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: Asia/Kolkata
+      CUSTOM_USER: npauser
+      PASSWORD: npapassword
+    networks:
+      - guacnet
+
+  linux-server:
+    image: ubuntu:22.04
+    container_name: linux-server
+    command: >
+      bash -c "
+      apt-get update &&
+      apt-get install -y openssh-server &&
+      useradd -m -s /bin/bash npauser &&
+      echo 'npauser:npapassword' | chpasswd &&
+      mkdir -p /run/sshd &&
+      /usr/sbin/sshd -D
+      "
+    networks:
+      - guacnet
+
+networks:
+  guacnet:
+    driver: bridge
