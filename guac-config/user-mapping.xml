@@ -1,0 +1,29 @@
+<user-mapping>
+    <authorize group="DesktopUsers">
+        <connection name="Linux Desktop">
+            <protocol>rdp</protocol>
+            <param name="hostname">linux-desktop</param>
+            <param name="port">3389</param>
+            <param name="username">npauser</param>
+            <param name="password">secret</param>
+        </connection>
+    </authorize>
+
+    <authorize group="SshUsers">
+        <connection name="Linux Server 1">
+            <protocol>ssh</protocol>
+            <param name="hostname">linux-server1</param>
+            <param name="port">2222</param>
+            <param name="username">npauser</param>
+            <param name="password">secret</param>
+        </connection>
+
+        <connection name="Linux Server 2">
+            <protocol>ssh</protocol>
+            <param name="hostname">linux-server2</param>
+            <param name="port">2222</param>
+            <param name="username">npauser</param>
+            <param name="password">secret</param>
+        </connection>
+    </authorize>
+</user-mapping>
