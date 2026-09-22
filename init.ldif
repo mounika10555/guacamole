@@ -6,6 +6,7 @@ dn: ou=Groups,dc=example,dc=com
 objectClass: organizationalUnit
 ou: Groups
 
+# Groups
 dn: cn=DesktopUsers,ou=Groups,dc=example,dc=com
 objectClass: groupOfNames
 cn: DesktopUsers
@@ -16,6 +17,7 @@ objectClass: groupOfNames
 cn: SshUsers
 member: uid=bob,ou=Users,dc=example,dc=com
 
+# Users
 dn: uid=alice,ou=Users,dc=example,dc=com
 objectClass: inetOrgPerson
 uid: alice

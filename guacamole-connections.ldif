@@ -1,0 +1,35 @@
+dn: cn=Linux Desktop,ou=Guacamole,dc=example,dc=com
+objectClass: top
+objectClass: guacConfigGroup
+cn: Linux Desktop
+guacConfigProtocol: rdp
+guacConfigParameter: hostname=linux-desktop
+guacConfigParameter: port=3389
+guacConfigParameter: username=npauser
+guacConfigParameter: password=secret
+member: uid=alice,ou=Users,dc=example,dc=com
+seeAlso: cn=DesktopUsers,ou=Groups,dc=example,dc=com
+
+dn: cn=Linux Server 1,ou=Guacamole,dc=example,dc=com
+objectClass: top
+objectClass: guacConfigGroup
+cn: Linux Server 1
+guacConfigProtocol: ssh
+guacConfigParameter: hostname=linux-server1
+guacConfigParameter: port=2222
+guacConfigParameter: username=npauser
+guacConfigParameter: password=secret
+member: uid=bob,ou=Users,dc=example,dc=com
+seeAlso: cn=SshUsers,ou=Groups,dc=example,dc=com
+
+dn: cn=Linux Server 2,ou=Guacamole,dc=example,dc=com
+objectClass: top
+objectClass: guacConfigGroup
+cn: Linux Server 2
+guacConfigProtocol: ssh
+guacConfigParameter: hostname=linux-server2
+guacConfigParameter: port=2222
+guacConfigParameter: username=npauser
+guacConfigParameter: password=secret
+member: uid=bob,ou=Users,dc=example,dc=com
+seeAlso: cn=SshUsers,ou=Groups,dc=example,dc=com
