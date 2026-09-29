@@ -131,19 +131,33 @@ echo "Guacamole setup completed"
 echo "======================================"
 echo "Open: http://localhost:8080/guacamole/"
 
-
 echo "[X/8] Configuring Linux Desktop RDP..."
 
 MSYS_NO_PATHCONV=1 docker exec linux-desktop bash -c '
-    echo "Checking Linux OS..."
+    echo "Checking OS..."
     cat /etc/os-release
 
     echo "Installing XFCE and XRDP..."
     apt-get update
     apt-get install -y xfce4 xfce4-goodies xrdp
 
+    echo "Creating RDP user..."
+
+    if ! id npauser >/dev/null 2>&1; then
+        useradd -m -s /bin/bash npauser
+    fi
+
+    echo "Setting RDP password..."
+    echo "npauser:secret" | chpasswd
+
+    echo "Configuring XFCE session..."
+    echo "startxfce4" > /home/npauser/.xsession
+
+    chown npauser:npauser /home/npauser/.xsession
+    chmod 644 /home/npauser/.xsession
+
     echo "Starting XRDP..."
-    service xrdp start
+    service xrdp restart
 
     echo "Checking XRDP status..."
     service xrdp status
