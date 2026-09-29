@@ -130,3 +130,23 @@ echo "======================================"
 echo "Guacamole setup completed"
 echo "======================================"
 echo "Open: http://localhost:8080/guacamole/"
+
+
+echo "[X/8] Configuring Linux Desktop RDP..."
+
+MSYS_NO_PATHCONV=1 docker exec linux-desktop bash -c '
+    echo "Checking Linux OS..."
+    cat /etc/os-release
+
+    echo "Installing XFCE and XRDP..."
+    apt-get update
+    apt-get install -y xfce4 xfce4-goodies xrdp
+
+    echo "Starting XRDP..."
+    service xrdp start
+
+    echo "Checking XRDP status..."
+    service xrdp status
+'
+
+echo "Linux Desktop RDP configuration completed."
