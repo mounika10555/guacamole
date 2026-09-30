@@ -76,31 +76,21 @@ MSYS_NO_PATHCONV=1 docker exec -i ldap ldapadd \
 
 echo "Guacamole LDAP schema installed."
 
-
-echo "[5/8] Creating Guacamole OU..."
-
-MSYS_NO_PATHCONV=1 docker exec -i ldap ldapadd \
-  -x \
-  -H ldap://localhost:389 \
-  -D "cn=admin,dc=example,dc=com" \
-  -w admin < guacamole-base.ldif || true
-
-
-echo "[6/8] Creating Guacamole connections..."
-
-MSYS_NO_PATHCONV=1 docker exec -i ldap ldapadd \
-  -x \
-  -H ldap://localhost:389 \
-  -D "cn=admin,dc=example,dc=com" \
-  -w admin < guacamole-connections.ldif || true
-
-echo "[6/8] Creating fix-guac-schema..."
+echo "[5/8] Creating fix-guac-schema..."
 
 MSYS_NO_PATHCONV=1 docker exec -i ldap ldapmodify \
   -Q \
   -Y EXTERNAL \
   -H ldapi:/// < fix-guac-schema.ldif
 
+
+echo "[6/8] Creating Guacamole OU..."
+
+MSYS_NO_PATHCONV=1 docker exec -i ldap ldapadd \
+  -x \
+  -H ldap://localhost:389 \
+  -D "cn=admin,dc=example,dc=com" \
+  -w admin < guacamole-base.ldif || true
 
 docker compose up -d --force-recreate guacamole
 
@@ -113,7 +103,7 @@ MSYS_NO_PATHCONV=1 docker exec -i ldap ldapmodify \
   -H ldapi:/// < ldap-read-access.ldif
 
 
-echo "[6/8] Creating Guacamole connections..."
+echo "[8/8] Creating Guacamole connections..."
 
 MSYS_NO_PATHCONV=1 docker exec -i ldap ldapadd \
   -x \
@@ -122,7 +112,7 @@ MSYS_NO_PATHCONV=1 docker exec -i ldap ldapadd \
   -w admin < guacamole-connections.ldif || true
 
 
-echo "[8/8] Restarting Guacamole..."
+echo "[9/9] Restarting Guacamole..."
 
 docker compose up -d --force-recreate guacamole
 
@@ -131,7 +121,7 @@ echo "Guacamole setup completed"
 echo "======================================"
 echo "Open: http://localhost:8080/guacamole/"
 
-echo "[X/8] Configuring Linux Desktop RDP..."
+echo "[10/8] Configuring Linux Desktop RDP..."
 
 MSYS_NO_PATHCONV=1 docker exec linux-desktop bash -c '
     echo "Checking OS..."
